@@ -47,7 +47,7 @@ The is the full code required for the hack:
 | **2.4** | `21 00 40`<br>`36 04` | `ld hl, $4000`<br>`ld [hl], 4` | `CD DD 3F`<br>`00`<br>`00` | `call $3FDD`<br>`nop`<br>`nop` | `F5`<br>`3E 04`<br>`CD E5 3F`<br>`F1`<br>`C9`                          | `push af`<br>`ld a, 4`<br>`call $3FE5`<br>`pop af`<br>`ret`                                   |
 | **2.C** | `21 00 40`<br>`77`    | `ld hl, $4000`<br>`ld [hl], a` | `CD E5 3F`<br>`00`         | `call $3FE5`<br>`nop`          | `21 00 40`                                                             | `ld hl, $4000`                                                                                |
 | **1**   | `EA 00 40`            | `ld [$4000], a`                | `CD E8 3F`                 | `call $3FE8`                   | `F5`<br>`CB 37`<br>`E6 C0`<br>`EA 00 70`<br>`F1`<br>`EA 00 40`<br>`C9` | `push af`<br>`swap a`<br>`and 192`<br>`ld [$7000], a`<br>`pop af`<br>`ld [$4000], a`<br>`ret` |
-| **Init**<br>(`$101`)| `C3 50 01`| `jp $150`                      | `C3 F5 3F`                 | `jp $3FF5`                     | `F3`<br>`F5`<br>`3E C0`<br>`EA 01 70`<br>`F1`<br>`C3 50 01`            | `di`<br>`push af`<br>`ld a, 192`<br>`ld [$7001], a`<br>`pop af`<br>`jp $150`                  |
+| **Init**<br>`$101`| `C3 50 01`| `jp $150`                      | `C3 F5 3F`                 | `jp $3FF5`                     | `F3`<br>`F5`<br>`3E C0`<br>`EA 01 70`<br>`F1`<br>`C3 50 01`            | `di`<br>`push af`<br>`ld a, 192`<br>`ld [$7001], a`<br>`pop af`<br>`jp $150`                  |
 
 The number in the first column refers to the numbers in the "Making the Patch" chapter. Remarks:
 - 2.0: `sub a` (or `xor a`) is a shorter instruction to load 0 into `A`.
