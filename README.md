@@ -37,7 +37,7 @@ If you are using FlashGBX, please note that FlashGBX neither knows that GB HICOL
 
 The is the full code required for the hack:
 
-| Method  | Old Bytecode          | Old  ASM                       | New Bytecode               | New ASM                        | Target Bytecode                                                        | Target ASM                                                                                    |
+|         | Old Bytecode          | Old  ASM                       | New Bytecode               | New ASM                        | Target Bytecode                                                        | Target ASM                                                                                    |
 | ------- | --------------------- | ------------------------------ | -------------------------- | ------------------------------ | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | **2.C** | `21 00 40`<br>`71`    | `ld hl, $4000`<br>`ld [hl], c` | `CD B7 3F`<br>`00`         | `call $3FB7`<br>`nop`          | `F5`<br>`79`<br>`CD E5 3F`<br>`F1`<br>`C9`                             | `push af`<br>`ld a, c`<br>`call $3FE5`<br>`pop af`<br>`ret`                                   |
 | **2.0** | `21 00 40`<br>`36 00` | `ld hl, $4000`<br>`ld [hl], 0` | `CD BE 3F`<br>`00`<br>`00` | `call $3FBE`<br>`nop`<br>`nop` | `F5`<br>`97`<br>`CD E5 3F`<br>`F1`<br>`C9`                             | `push af`<br>`sub a`<br>`call $3FE5`<br>`pop af`<br>`ret`                                     |
@@ -49,7 +49,7 @@ The is the full code required for the hack:
 | **1**   | `EA 00 40`            | `ld [$4000], a`                | `CD E8 3F`                 | `call $3FE8`                   | `F5`<br>`CB 37`<br>`E6 C0`<br>`EA 00 70`<br>`F1`<br>`EA 00 40`<br>`C9` | `push af`<br>`swap a`<br>`and 192`<br>`ld [$7000], a`<br>`pop af`<br>`ld [$4000], a`<br>`ret` |
 | **Init**<br>(`$101`)| `C3 50 01`| `jp $150`                      | `C3 F5 3F`                 | `jp $3FF5`                     | `F3`<br>`F5`<br>`3E C0`<br>`EA 01 70`<br>`F1`<br>`C3 50 01`            | `di`<br>`push af`<br>`ld a, 192`<br>`ld [$7001], a`<br>`pop af`<br>`jp $150`                  |
 
-The number in the "Method" column refers to the numbers in the "Making the Patch" chapter. Remarks:
+The number in the first column refers to the numbers in the "Making the Patch" chapter. Remarks:
 - 2.0: `sub a` (or `xor a`) is a shorter instruction to load 0 into `A`.
 - 2.A: This is cleverly using the fact the the only difference to method 1 is that it also sets `HL` to `$4000`, so it does this first and then continues with method 1 (no need to `call`!). This saves space. Space isn't tight right now but might change in the future.
 - 1: Bits 2 and 3 of the bank have to end up in bits 6 and 7 of `$7000` (the ROM offset). `swap` swaps nibbles, so that works. `and 192` makes sure that the ROM offset is actually divisable by its size with no remained. I do not currently know if the GB HICOL mapper cares about this or if it ignores offset bits that aren't applicable to the current ROM size.
